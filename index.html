@@ -8,14 +8,16 @@
 </head>
 
 <body>
+    <header>Etch-a-Sketch 3000</header>
     <div class="container">
         <div class="controls">
             <button class="clear">CLEAR</button>
-            <button class="new">NEW</button>
             <button class="color">COLOR</button>
             <div class="slidecontainer">
-                <input type="range" min="1" max="100" value="16" class="slider" id="gridSize">
+                <input type="range" min="1" max="100" value="16" class="slider" id="gridSlider">
+                <div id="gridSliderValue"></div>
             </div>
+            <button class="new">NEW</button>
         </div>
         <div class="grid"></div>
     </div>

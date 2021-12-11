@@ -75,11 +75,14 @@ function newGrid() {
 let gridColor = 'black';
 
 // Add dynamic slider functionality, default value is 16. [room for a separate event handler & function here?]
-const slider = document.getElementById('gridSize');
-slider.value = 16;
-let gridSize = slider.value;
-slider.oninput = function () {
+const gridSlider = document.getElementById('gridSlider');
+const gridSliderValue = document.getElementById('gridSliderValue');
+gridSlider.value = 16;
+gridSliderValue.textContent = gridSlider.value;
+let gridSize = gridSlider.value;
+gridSlider.oninput = function () {
     gridSize = this.value;
+    gridSliderValue.textContent = this.value;
 }
 
 // Add event listener for buttons
