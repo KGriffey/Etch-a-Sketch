@@ -1,0 +1,23 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 512px;
+    aspect-ratio: 1;
+}
+
+.gridSquare {
+    aspect-ratio: 1;
+    border: solid black 2px;
+}
