@@ -1,28 +1,92 @@
-function createGrid(size) {
-    // Limit the grid size to 100x100
-    if (size > 100) {
-        size = 100;
-    }
-
-    // Create the grid squares and add them to the main container
+function createGrid() {
+    // Create the grid gridSquares and add them to the main container
     const container = document.querySelector('.grid');
-    for (let i = 0; i < size * size; i++) {
+    const gridSquareWidth = (100 / gridSize) + "%";
+
+    for (let i = 0; i < gridSize * gridSize; i++) {
         const gridSquare = document.createElement('div');
         gridSquare.setAttribute('class', 'gridSquare');
-        gridSquare.style.width = (100 / size) + "%";
+        gridSquare.style.width = gridSquareWidth
+        gridSquare.style.backgroundColor = 'transparent';
         container.appendChild(gridSquare);
     }
+
+    // Add event listener for grid hover
+    const gridSquares = document.querySelectorAll('.gridSquare');
+    gridSquares.forEach(div => {
+        div.addEventListener('mouseover', setColor);
+    });
 }
 
 function setColor() {
-    this.style.backgroundColor = 'black';
+    // If the grid square hasn't been filled yet, fill it
+    if(this.style.backgroundColor === 'transparent'){
+        this.style.backgroundColor = gridColor;
+    }
 }
 
-// Init the grid
-createGrid(16);
+function toggleColor() {
+    const colorBtn = document.querySelector('.controls .color')
+    
+    if(gridColor === 'black'){
+        colorBtn.style.backgroundColor = 'cyan';
+        gridColor = 'red';
 
-// Add event listener for grid hover
-const squares = document.querySelectorAll('.gridSquare');
-squares.forEach(div => {
-    div.addEventListener('mouseover', setColor);
+    } else{
+        colorBtn.style.backgroundColor = '#e9e9ed';
+        gridColor = 'black';
+    }
+}
+
+function parseButton() {
+    if (this.className === 'clear') {
+        clearGrid();
+    } else if (this.className === 'new') {
+        newGrid();
+    } else if (this.className === 'color') {
+        toggleColor();
+    }
+}
+
+function clearGrid() {
+    // Clear each grid square
+    const gridSquares = document.querySelectorAll('.gridSquare');
+    gridSquares.forEach(div => {
+        div.style.backgroundColor = 'transparent';
+    });
+}
+
+function removeGrid() {
+    // Remove an existing grid
+    const container = document.querySelector('.grid');
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+}
+
+function newGrid() {
+    //Remove existing grid
+    removeGrid();
+
+    // Create new grid
+    createGrid();
+}
+
+let gridColor = 'black';
+
+// Add dynamic slider functionality, default value is 16. [room for a separate event handler & function here?]
+const slider = document.getElementById('gridSize');
+slider.value = 16;
+let gridSize = slider.value;
+slider.oninput = function () {
+    gridSize = this.value;
+}
+
+// Add event listener for buttons
+const buttons = document.querySelectorAll('.controls button');
+buttons.forEach(button => {
+    button.addEventListener('click', parseButton);
 });
+
+// Init the base grid on page load
+createGrid();
