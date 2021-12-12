@@ -159,7 +159,7 @@ function getGridSliderValue() {
 
 function setGridSliderText(value) {
     const gridSliderText = document.getElementById('gridSliderText');
-    gridSliderText.textContent = value;
+    gridSliderText.textContent = 'Grid: ' + value + ' x ' + value;
 }
 
 /* Main */
