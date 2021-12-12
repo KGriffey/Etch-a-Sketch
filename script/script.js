@@ -20,9 +20,9 @@ function createGrid() {
 
 function fillGridSquare() {
     // If the grid square hasn't been filled yet, fill it
-    if (this.style.backgroundColor === 'transparent') {
+    if (this.style.backgroundColor === 'transparent' && isDraw === true) {
         // Fill with black or color
-        if(isColor === false){
+        if (isColor === false) {
             this.style.backgroundColor = 'black';
         } else {
             this.style.backgroundColor = randomRGB();
@@ -31,24 +31,26 @@ function fillGridSquare() {
 }
 
 function randomRGB() {
-    const R = Math.floor(Math.random()*256);
-    const G = Math.floor(Math.random()*256);
-    const B = Math.floor(Math.random()*256);
+    const R = Math.floor(Math.random() * 256);
+    const G = Math.floor(Math.random() * 256);
+    const B = Math.floor(Math.random() * 256);
 
     return `rgb(${R}, ${G}, ${B})`;
 }
 
-
 function toggleColor() {
     isColor = !isColor;
     const colorBtn = document.querySelector('.controls .color');
-    if (isColor === false){
+    if (isColor === false) {
         colorBtn.style.backgroundColor = 'gray';
     } else {
         colorBtn.style.backgroundColor = 'cyan';
     }
 }
 
+function toggleDraw() {
+    isDraw = !isDraw;
+}
 
 function parseButton() {
     // Execute function depending on button clicked
@@ -85,8 +87,10 @@ function newGrid() {
     createGrid();
 }
 
-// Color selector false = black, true = random RGB
+
+// Initialize color and draw to false
 let isColor = false;
+let isDraw = false;
 
 // Add dynamic slider functionality, default value is 16. [room for a separate event handler & function here?]
 const gridSlider = document.getElementById('gridSlider');
@@ -99,11 +103,16 @@ gridSlider.oninput = function () {
     gridSliderValue.textContent = this.value;
 }
 
-// Add event listener for buttons
-const buttons = document.querySelectorAll('.controls button');
-buttons.forEach(button => {
+// Add event listener for ctrlButtons
+const ctrlButtons = document.querySelectorAll('.controls button');
+ctrlButtons.forEach(button => {
     button.addEventListener('click', parseButton);
 });
+
+// Add event listener for grid for draw toggle
+const grid = document.querySelector('.grid');
+grid.addEventListener('click', toggleDraw);
+
 
 // Init the base grid on page load
 createGrid();
