@@ -1,9 +1,75 @@
+function randomRGB() {
+    const R = Math.floor(Math.random() * 256);
+    const G = Math.floor(Math.random() * 256);
+    const B = Math.floor(Math.random() * 256);
+
+    return `rgb(${R}, ${G}, ${B})`;
+}
+
+/* Global color variable functions */
+function getColor() {
+    return color;
+}
+
+function setColor(boolean) {
+    color = boolean;
+}
+
+function toggleColor() {
+    setColor(!getColor());
+    const colorBtn = document.querySelector('.controls .color');
+    if (color === false) {
+        colorBtn.style.backgroundColor = 'gray';
+    } else {
+        colorBtn.style.backgroundColor = 'cyan';
+    }
+}
+
+/* Global draw variable functions */
+function initDraw() {
+    const grid = document.querySelector('.grid');
+    grid.addEventListener('click', toggleDraw);
+}
+
+function getDraw() {
+    return draw;
+}
+
+function setDraw(boolean) {
+    draw = boolean;
+}
+
+function toggleDraw() {
+    setDraw(!getDraw());
+}
+
+/* Button functions */
+function initCtrlButtons() {
+    const ctrlButtons = document.querySelectorAll('.controls button');
+    ctrlButtons.forEach(button => {
+        button.addEventListener('click', parseCtrlButton);
+    });
+}
+
+function parseCtrlButton() {
+    // Execute function depending on button clicked
+    if (this.className === 'clear') {
+        clearGrid();
+    } else if (this.className === 'new') {
+        newGrid();
+    } else if (this.className === 'color') {
+        toggleColor();
+    }
+}
+
+/* Grid creation and manipulation */
 function createGrid() {
     // Create the grid gridSquares and add them to the main container
+    const size = getGridSize();
     const container = document.querySelector('.grid');
-    const gridSquareWidth = (100 / gridSize) + "%";
+    const gridSquareWidth = (100 / size) + "%";
 
-    for (let i = 0; i < gridSize * gridSize; i++) {
+    for (let i = 0; i < size * size; i++) {
         const gridSquare = document.createElement('div');
         gridSquare.setAttribute('class', 'gridSquare');
         gridSquare.style.width = gridSquareWidth
@@ -16,51 +82,6 @@ function createGrid() {
     gridSquares.forEach(div => {
         div.addEventListener('mouseover', fillGridSquare);
     });
-}
-
-function fillGridSquare() {
-    // If the grid square hasn't been filled yet, fill it
-    if (this.style.backgroundColor === 'transparent' && isDraw === true) {
-        // Fill with black or color
-        if (isColor === false) {
-            this.style.backgroundColor = 'black';
-        } else {
-            this.style.backgroundColor = randomRGB();
-        }
-    }
-}
-
-function randomRGB() {
-    const R = Math.floor(Math.random() * 256);
-    const G = Math.floor(Math.random() * 256);
-    const B = Math.floor(Math.random() * 256);
-
-    return `rgb(${R}, ${G}, ${B})`;
-}
-
-function toggleColor() {
-    isColor = !isColor;
-    const colorBtn = document.querySelector('.controls .color');
-    if (isColor === false) {
-        colorBtn.style.backgroundColor = 'gray';
-    } else {
-        colorBtn.style.backgroundColor = 'cyan';
-    }
-}
-
-function toggleDraw() {
-    isDraw = !isDraw;
-}
-
-function parseButton() {
-    // Execute function depending on button clicked
-    if (this.className === 'clear') {
-        clearGrid();
-    } else if (this.className === 'new') {
-        newGrid();
-    } else if (this.className === 'color') {
-        toggleColor();
-    }
 }
 
 function clearGrid() {
@@ -79,6 +100,14 @@ function removeGrid() {
     }
 }
 
+function initGrid() {
+    initGridSlider();
+    setGridSize(getGridSliderValue());
+    initCtrlButtons();
+    initDraw();
+    createGrid();
+}
+
 function newGrid() {
     //Remove existing grid
     removeGrid();
@@ -87,32 +116,53 @@ function newGrid() {
     createGrid();
 }
 
-
-// Initialize color and draw to false
-let isColor = false;
-let isDraw = false;
-
-// Add dynamic slider functionality, default value is 16. [room for a separate event handler & function here?]
-const gridSlider = document.getElementById('gridSlider');
-const gridSliderValue = document.getElementById('gridSliderValue');
-gridSlider.value = 16;
-gridSliderValue.textContent = gridSlider.value;
-let gridSize = gridSlider.value;
-gridSlider.oninput = function () {
-    gridSize = this.value;
-    gridSliderValue.textContent = this.value;
+function fillGridSquare() {
+    // If the grid square hasn't been filled yet, fill it
+    if (this.style.backgroundColor === 'transparent' && getDraw() === true) {
+        // Fill with black or color
+        if (getColor() === false) {
+            this.style.backgroundColor = 'black';
+        } else {
+            this.style.backgroundColor = randomRGB();
+        }
+    }
 }
 
-// Add event listener for ctrlButtons
-const ctrlButtons = document.querySelectorAll('.controls button');
-ctrlButtons.forEach(button => {
-    button.addEventListener('click', parseButton);
-});
+/* Grid size functions */
+function getGridSize() {
+    return gridSize;
+}
 
-// Add event listener for grid for draw toggle
-const grid = document.querySelector('.grid');
-grid.addEventListener('click', toggleDraw);
+function setGridSize(size) {
+    gridSize = size;
+}
 
+function updateGridSize() {
+    setGridSize(this.value);
+    setGridSliderText(this.value);
+}
 
-// Init the base grid on page load
-createGrid();
+/* Grid slider functions */
+function initGridSlider() {
+    const gridSlider = document.getElementById('gridSlider');
+    gridSlider.addEventListener('input', updateGridSize);
+
+    setGridSliderText(gridSlider.value);
+}
+
+function getGridSliderValue() {
+    const gridSlider = document.getElementById('gridSlider');
+    return gridSlider.value;
+}
+
+function setGridSliderText(value) {
+    const gridSliderText = document.getElementById('gridSliderText');
+    gridSliderText.textContent = value;
+}
+
+/* Main */
+let color = false;
+let draw = false;
+let gridSize = 16;
+
+initGrid();
