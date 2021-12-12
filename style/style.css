@@ -39,6 +39,7 @@ header {
     justify-content: center;
     width: 512px;
     aspect-ratio: 1;
+    background-color: white;
     border: solid black 4px;
 }
 

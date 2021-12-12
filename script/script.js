@@ -14,31 +14,44 @@ function createGrid() {
     // Add event listener for grid hover
     const gridSquares = document.querySelectorAll('.gridSquare');
     gridSquares.forEach(div => {
-        div.addEventListener('mouseover', setColor);
+        div.addEventListener('mouseover', fillGridSquare);
     });
 }
 
-function setColor() {
+function fillGridSquare() {
     // If the grid square hasn't been filled yet, fill it
-    if(this.style.backgroundColor === 'transparent'){
-        this.style.backgroundColor = gridColor;
+    if (this.style.backgroundColor === 'transparent') {
+        // Fill with black or color
+        if(isColor === false){
+            this.style.backgroundColor = 'black';
+        } else {
+            this.style.backgroundColor = randomRGB();
+        }
     }
 }
+
+function randomRGB() {
+    const R = Math.floor(Math.random()*256);
+    const G = Math.floor(Math.random()*256);
+    const B = Math.floor(Math.random()*256);
+
+    return `rgb(${R}, ${G}, ${B})`;
+}
+
 
 function toggleColor() {
-    const colorBtn = document.querySelector('.controls .color')
-    
-    if(gridColor === 'black'){
+    isColor = !isColor;
+    const colorBtn = document.querySelector('.controls .color');
+    if (isColor === false){
+        colorBtn.style.backgroundColor = 'gray';
+    } else {
         colorBtn.style.backgroundColor = 'cyan';
-        gridColor = 'red';
-
-    } else{
-        colorBtn.style.backgroundColor = '#e9e9ed';
-        gridColor = 'black';
     }
 }
 
+
 function parseButton() {
+    // Execute function depending on button clicked
     if (this.className === 'clear') {
         clearGrid();
     } else if (this.className === 'new') {
@@ -72,7 +85,8 @@ function newGrid() {
     createGrid();
 }
 
-let gridColor = 'black';
+// Color selector false = black, true = random RGB
+let isColor = false;
 
 // Add dynamic slider functionality, default value is 16. [room for a separate event handler & function here?]
 const gridSlider = document.getElementById('gridSlider');
