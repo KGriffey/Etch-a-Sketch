@@ -19,9 +19,11 @@ function toggleColor() {
     setColor(!getColor());
     const colorBtn = document.querySelector('.controls .color');
     if (color === false) {
-        colorBtn.style.backgroundColor = 'gray';
+        //colorBtn.style.backgroundColor = '#b5b5b5';
+        colorBtn.style.backgroundImage = ''
     } else {
-        colorBtn.style.backgroundColor = 'cyan';
+        //colorBtn.style.backgroundColor = '#00e0f0';
+        colorBtn.style.backgroundImage = 'linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)'
     }
 }
 
